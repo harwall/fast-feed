@@ -1,10 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet,Image, Text, TouchableOpacity, View} from 'react-native';
 import {Accelerometer, Audio} from 'expo';
 
 export default class AccelerometerSensor extends React.Component {
     state = {
         accelerometerData: {},
+        filterColor: 'fff',
     };
 
     componentDidMount() {
@@ -13,6 +14,19 @@ export default class AccelerometerSensor extends React.Component {
 
     componentWillUnmount() {
         this._unsubscribe();
+    }
+
+    getBackground() {
+      return fetch('http://www.colr.org/json/color/random')
+        .then((response) => response.json())
+        .then((responseJson) => {
+          var tata = responseJson.colors[0].hex;
+          this.state.filterColor = tata;
+          alert(tata);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
 
     _subscribe = async () => {
@@ -31,6 +45,8 @@ export default class AccelerometerSensor extends React.Component {
                     await soundObject.stopAsync();
                     await soundObject.playAsync();
                     // Your sound is playing!
+
+                    this.getBackground();
                 } catch (error) {
                     console.log(error);
                     // An error occurred!
@@ -54,7 +70,8 @@ export default class AccelerometerSensor extends React.Component {
         return (
             <View style={styles.sensor}>
                 <Text>Accelerometer:</Text>
-                <Text>x: {round(x)} y: {round(y)} z: {round(z)}</Text>
+                <Text>x: {round(x)} y: {round(y)} z: {round(z)} #{this.state.filterColor}</Text>
+                <Image resizeMode='contain' style={[styles.meuuuh , {backgroundColor: `#${this.state.filterColor}`}]} source={require('../assets/images/boite-meuh.png')}/>
 
             </View>
         );
@@ -93,5 +110,9 @@ const styles = StyleSheet.create({
     sensor: {
         marginTop: 15,
         paddingHorizontal: 10,
+    },
+    meuuuh: {
+        width: '80%',
+        marginLeft: '10%',
     },
 });
