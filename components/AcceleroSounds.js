@@ -20,9 +20,11 @@ export default class AccelerometerSensor extends React.Component {
       return fetch('http://www.colr.org/json/color/random')
         .then((response) => response.json())
         .then((responseJson) => {
-          var tata = responseJson.colors[0].hex;
-          this.state.filterColor = tata;
-          alert(tata);
+          var hexBgColor = responseJson.colors[0].hex;
+          if (hexBgColor.length < 2) {
+            hexBgColor = 'ffff00';
+          }
+          this.state.filterColor = hexBgColor;
         })
         .catch((error) => {
           console.error(error);
@@ -33,7 +35,7 @@ export default class AccelerometerSensor extends React.Component {
         let status = true;
         const soundObject = new Audio.Sound();
 
-        await soundObject.loadAsync(require('../assets/sounds/holy.mp3'));
+        await soundObject.loadAsync(require('../assets/sounds/cow001.wav'));
         // Your sound is playing!
 
         this._subscription = Accelerometer.addListener(async accelerometerData => {
@@ -69,10 +71,7 @@ export default class AccelerometerSensor extends React.Component {
 
         return (
             <View style={styles.sensor}>
-                <Text>Accelerometer:</Text>
-                <Text>x: {round(x)} y: {round(y)} z: {round(z)} #{this.state.filterColor}</Text>
                 <Image resizeMode='contain' style={[styles.meuuuh , {backgroundColor: `#${this.state.filterColor}`}]} source={require('../assets/images/boite-meuh.png')}/>
-
             </View>
         );
     }
