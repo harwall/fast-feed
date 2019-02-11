@@ -39,7 +39,6 @@ export default class AccelerometerSensor extends React.Component {
         // Your sound is playing!
 
         this._subscription = Accelerometer.addListener(async accelerometerData => {
-            console.log(accelerometerData.z);
             if (accelerometerData.z < 0 && status === true) {
                 Accelerometer.setUpdateInterval(1000);
                 status = !status;
